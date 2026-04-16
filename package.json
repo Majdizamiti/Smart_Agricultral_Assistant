@@ -10,7 +10,7 @@
     "axios": "^1.13.2",
     "firebase": "^10.0.0",
     "framer-motion": "^10.16.0",
-    "lucide-react": "^0.263.0",
+    "lucide-react": "^1.8.0",
     "n8n": "^2.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

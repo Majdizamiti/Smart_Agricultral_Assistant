@@ -197,6 +197,17 @@ const Vans = () => {
                     waterUsed: 0,
                     lastStatusChange: new Date().toISOString()
                 });
+
+                // Also create an IoT sensor entry linked to this van
+                const iotRef = ref(database, `users/${currentUser.uid}/iot/${vanId}`);
+                await set(iotRef, {
+                    humidity: 0,
+                    lightintensity: 0,
+                    relayState: 0,
+                    soilmoisture: 0,
+                    temperature: 0,
+                    waterlevel: 0
+                });
             }
             handleCloseModal();
             setError(null);
@@ -238,6 +249,11 @@ const Vans = () => {
         try {
             const vanRef = ref(database, `users/${currentUser.uid}/vans/${vanId}`);
             await remove(vanRef);
+
+            // Also remove the corresponding IoT sensor entry
+            const iotRef = ref(database, `users/${currentUser.uid}/iot/${vanId}`);
+            await remove(iotRef);
+
             setError(null);
         } catch (err) {
             setError('Failed to delete van');

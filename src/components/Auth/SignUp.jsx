@@ -1,11 +1,38 @@
 // src/components/Auth/SignUp.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../../config/firebaseConfig';
+import { auth, database } from '../../config/firebaseConfig';
 import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { ref, set } from 'firebase/database';
 import { motion } from 'framer-motion';
 import { UserPlus, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import './AuthForm.css';
+
+// Initialize default data for a new user in the database
+const initializeNewUser = async (uid) => {
+    try {
+        // Create default IoT sensor data matching hardware structure
+        const iotRef = ref(database, `users/${uid}/iot/data`);
+        await set(iotRef, {
+            humidity: 45,
+            lightintensity: 68,
+            relayState: 0,
+            soilmoisture: 681,
+            temperature: 15,
+            waterlevel: 200
+        });
+
+        // Create default subscription (basic/free plan)
+        const subRef = ref(database, `users/${uid}/subscription`);
+        await set(subRef, {
+            plan: 'basic',
+            active: true,
+            upgradedAt: new Date().toISOString()
+        });
+    } catch (err) {
+        console.error('Error initializing new user data:', err);
+    }
+};
 
 const SignUp = () => {
     const [email, setEmail] = useState('');
@@ -34,7 +61,8 @@ const SignUp = () => {
                 return;
             }
 
-            await createUserWithEmailAndPassword(auth, email, password);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await initializeNewUser(userCredential.user.uid);
             navigate('/dashboard');
         } catch (err) {
             setError(err.message || 'An error occurred during sign up');
@@ -49,7 +77,8 @@ const SignUp = () => {
 
         try {
             const provider = new GoogleAuthProvider();
-            await signInWithPopup(auth, provider);
+            const userCredential = await signInWithPopup(auth, provider);
+            await initializeNewUser(userCredential.user.uid);
             navigate('/dashboard');
         } catch (err) {
             setError(err.message || 'An error occurred during Google sign up');
