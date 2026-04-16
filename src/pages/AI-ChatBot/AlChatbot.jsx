@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import {
-    Box,
-    Card,
     Typography,
     TextField,
     Button,
@@ -12,6 +10,7 @@ import {
     useTheme,
     useMediaQuery
 } from '@mui/material';
+
 import {
     Send,
     Mic,
@@ -19,19 +18,12 @@ import {
     AttachFile,
     PhotoCamera,
     SmartToy,
-    Close,
-    Refresh,
-    VolumeUp,
-    Agriculture,
-    Lightbulb,
-    PestControl,
-    WaterDrop
+    Refresh
 } from '@mui/icons-material';
 import './aiChatbot.css';
 
 const FarmingChatbot = ({ darkMode = false }) => {
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const [messages, setMessages] = useState([
         {
@@ -47,7 +39,6 @@ const FarmingChatbot = ({ darkMode = false }) => {
     const [recordingTime, setRecordingTime] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [voiceResponse, setVoiceResponse] = useState(false);
 
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);

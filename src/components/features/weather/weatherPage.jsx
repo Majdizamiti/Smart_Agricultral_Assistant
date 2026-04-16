@@ -74,8 +74,8 @@ const ForecastCard = ({ day, isToday = false }) => {
             {day.day.daily_chance_of_rain > 0 && (
                 <div className="forecast-rain">
                     <div className="forecast-rain-bar">
-                        <div 
-                            className="forecast-rain-fill" 
+                        <div
+                            className="forecast-rain-fill"
                             style={{ width: `${day.day.daily_chance_of_rain}%` }}
                         ></div>
                     </div>
@@ -186,7 +186,7 @@ const WeatherPage = () => {
         }, 15 * 60 * 1000);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [getCurrentLocation, handleRefresh]);
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -225,7 +225,7 @@ const WeatherPage = () => {
             <div className="weather-search-card">
                 <div className="weather-search-header">
                     <h2 className="weather-search-title">🌤️ Farm Weather Forecast</h2>
-                    <button 
+                    <button
                         className={`weather-refresh-btn ${refreshing ? 'refreshing' : ''}`}
                         onClick={handleRefresh}
                         disabled={loading || refreshing}
@@ -242,15 +242,15 @@ const WeatherPage = () => {
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
                     />
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         className="weather-search-submit"
                         disabled={loading || !location.trim()}
                     >
                         <Search />
                         {loading ? 'Loading...' : 'Search'}
                     </button>
-                    <button 
+                    <button
                         type="button"
                         className="weather-location-btn"
                         onClick={getCurrentLocation}
@@ -309,7 +309,7 @@ const WeatherPage = () => {
                                         <span className="weather-detail-label">Wind</span>
                                         <span className="weather-detail-value">
                                             {weatherData.windSpeed} km/h
-                                            <Navigation 
+                                            <Navigation
                                                 className="weather-wind-icon"
                                                 style={{ transform: `rotate(${weatherData.windDegree}deg)` }}
                                             />
