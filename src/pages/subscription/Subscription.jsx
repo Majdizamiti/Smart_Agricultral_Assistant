@@ -1,7 +1,7 @@
 // src/components/subscription/Subscription.jsx
 import { useState, useEffect } from 'react';
 import { database, auth } from '../../config/firebaseConfig';
-import { ref, onValue, off, set, update } from 'firebase/database';
+import { ref, onValue, off, set } from 'firebase/database';
 import { motion } from 'framer-motion';
 import {
     CreditCard,
@@ -18,7 +18,7 @@ import './Subscription.css';
 
 const Subscription = () => {
     const [currentPlan, setCurrentPlan] = useState('basic');
-    const [userSubscription, setUserSubscription] = useState(null);
+    const [, setUserSubscription] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
@@ -183,23 +183,6 @@ const Subscription = () => {
             date.setFullYear(date.getFullYear() + 1);
         }
         return date.toISOString();
-    };
-
-    const isFeatureUnlocked = (feature) => {
-        switch (feature) {
-            case 'dashboard':
-                return true;
-            case 'farmZones':
-                return currentPlan !== 'basic';
-            case 'vans':
-                return currentPlan !== 'basic';
-            case 'liveChat':
-                return currentPlan === 'premium';
-            case 'aiAssistant':
-                return currentPlan === 'premium';
-            default:
-                return false;
-        }
     };
 
     if (loading) {

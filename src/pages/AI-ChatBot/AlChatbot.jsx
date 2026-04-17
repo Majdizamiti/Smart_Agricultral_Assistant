@@ -6,9 +6,7 @@ import {
     Button,
     IconButton,
     Avatar,
-    Chip,
-    useTheme,
-    useMediaQuery
+    Chip
 } from '@mui/material';
 
 import {
@@ -23,7 +21,6 @@ import {
 import './aiChatbot.css';
 
 const FarmingChatbot = ({ darkMode = false }) => {
-    const theme = useTheme();
 
     const [messages, setMessages] = useState([
         {

@@ -1,5 +1,5 @@
 // src/components/features/weather/weatherPage.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
     WbSunny, Opacity, Air, Compress, Visibility, Thermostat,
     MyLocation, Search, Refresh, WaterDrop, Umbrella, Navigation
@@ -97,7 +97,7 @@ const WeatherPage = () => {
     const [usingGeolocation, setUsingGeolocation] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
-    const fetchWeatherData = async (query = 'New York') => {
+    const fetchWeatherData = useCallback(async (query = 'New York') => {
         setLoading(true);
         setError('');
         try {
@@ -133,17 +133,17 @@ const WeatherPage = () => {
                 setForecastData(data.forecast.forecastday);
                 setLocation(data.location.name);
             }
-        } catch (error) {
-            console.error('Error fetching weather data:', error);
+        } catch (err) {
+            console.error('Error fetching weather data:', err);
             setError('Failed to fetch weather data. Please try again.');
             setWeatherData(null);
             setForecastData(null);
         }
         setLoading(false);
         setRefreshing(false);
-    };
+    }, []);
 
-    const getCurrentLocation = () => {
+    const getCurrentLocation = useCallback(() => {
         setUsingGeolocation(true);
         setLoading(true);
         setError('');
@@ -160,23 +160,23 @@ const WeatherPage = () => {
                 fetchWeatherData(`${latitude},${longitude}`);
                 setUsingGeolocation(false);
             },
-            (error) => {
-                console.error('Error getting location:', error);
+            (err) => {
+                console.error('Error getting location:', err);
                 setError('Unable to retrieve your location');
                 setLoading(false);
                 setUsingGeolocation(false);
             }
         );
-    };
+    }, [fetchWeatherData]);
 
-    const handleRefresh = () => {
+    const handleRefresh = useCallback(() => {
         setRefreshing(true);
         if (location.trim()) {
             fetchWeatherData(location);
         } else {
             getCurrentLocation();
         }
-    };
+    }, [location, fetchWeatherData, getCurrentLocation]);
 
     useEffect(() => {
         getCurrentLocation();
